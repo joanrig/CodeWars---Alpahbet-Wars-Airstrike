@@ -1,4 +1,5 @@
 def alphabet_war(fight) #"z*z*z*zs"
+  fight = fight.scan(/./)
   
   sides= Hash.new
   sides[:right] = {"m":4, "q":3, "d":2, "z":1}
@@ -16,11 +17,13 @@ def alphabet_war(fight) #"z*z*z*zs"
     bomb_spot = (0 ... fight.length).find_all {|i| fight[i] == "*"} # => [1, 3, 5]
   
     #delete bomb spots and adjacent characters
-    bomb_spot.each do |spot|
+    bomb_spot.each do |spot|   
       if spot == 0
-        fight.delete(fight[spot...spot+1])
-      elsif spot == fight.length - 1
-        fight.delete(fight[spot-2...spot]) 
+        2.times do fight.shift 
+        end
+      elsif spot == fight[-1]
+        2.times do fight.pop  
+        end
       else
         fight.delete(fight[spot-1...spot+1])
       end 
@@ -29,14 +32,14 @@ def alphabet_war(fight) #"z*z*z*zs"
       #=>" z  s"
     
   #assign survivors/points to their sides
-  if fight == ""
+  if fight == []
     return "Let's fight again!"
   end
    
   right_pts = []
   left_pts = []
       
-  fight.scan(/./).each do |survivor|
+  fight.each do |survivor|
     sides[:right].each do |k,v|
       if survivor.to_sym == k
         right_pts<< v.to_i
@@ -44,7 +47,7 @@ def alphabet_war(fight) #"z*z*z*zs"
     end
   end
       
-  fight.scan(/./).each do |survivor|
+  fight.each do |survivor|
     sides[:left].each do |k,v|
       if survivor.to_sym == k
         left_pts<< v.to_i
